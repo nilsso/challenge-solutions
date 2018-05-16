@@ -1,0 +1,24 @@
+# Generic
+*
+!README.md
+!.gitignore
+
+# C++
+!cpp/
+!cpp/*/
+!*.cpp
+!*.h
+!CMakeLists.txt
+*_test.cpp
+
+# Lua
+!lua/
+!lua/*/
+!*.lua
+
+# Python
+!python/
+!python/*/
+!*.py
+m?.py
+*speed_test.py
