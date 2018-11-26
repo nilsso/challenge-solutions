@@ -1,8 +1,15 @@
-# Gigasecond
+# Word Count
 
-Calculate the moment when someone has lived for 10^9 seconds.
+Given a phrase, count the occurrences of each word in that phrase.
 
-A gigasecond is 10^9 (1,000,000,000) seconds.
+For example for the input `"olly olly in come free"`
+
+```text
+olly: 2
+in: 1
+come: 1
+free: 1
+```
 
 ## Getting Started
 
@@ -38,7 +45,7 @@ are new to C++, but have programmed in C, beware of
 
 ## Source
 
-Chapter 9 in Chris Pine's online Learn to Program tutorial. [http://pine.fm/LearnToProgram/?Chapter=09](http://pine.fm/LearnToProgram/?Chapter=09)
+This is a classic toy problem, but we were reminded of it by seeing it in the Go Tour.
 
 ## Submitting Incomplete Solutions
 It's possible to submit an incomplete solution so you can see how others have completed the exercise.

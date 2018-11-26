@@ -1,7 +1,0 @@
-
-namespace gigasecond
-{
-  int advance()
-  {
-  }
-}

@@ -1,8 +1,10 @@
-# Gigasecond
+# Anagram
 
-Calculate the moment when someone has lived for 10^9 seconds.
+Given a word and a list of possible anagrams, select the correct sublist.
 
-A gigasecond is 10^9 (1,000,000,000) seconds.
+Given `"listen"` and a list of candidates like `"enlists" "google"
+"inlets" "banana"` the program should return a list containing
+`"inlets"`.
 
 ## Getting Started
 
@@ -38,7 +40,7 @@ are new to C++, but have programmed in C, beware of
 
 ## Source
 
-Chapter 9 in Chris Pine's online Learn to Program tutorial. [http://pine.fm/LearnToProgram/?Chapter=09](http://pine.fm/LearnToProgram/?Chapter=09)
+Inspired by the Extreme Startup game [https://github.com/rchatley/extreme_startup](https://github.com/rchatley/extreme_startup)
 
 ## Submitting Incomplete Solutions
 It's possible to submit an incomplete solution so you can see how others have completed the exercise.
