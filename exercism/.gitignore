@@ -3,6 +3,11 @@
 !README.md
 !.gitignore
 
+# Rust
+!rust/
+!rust/*/
+!*.rs
+
 # C++
 !cpp/
 !cpp/*/
