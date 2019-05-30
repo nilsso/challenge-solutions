@@ -9,6 +9,8 @@
 !*.rs
 !src
 !src/*
+!tests
+!tests/*
 
 # C++
 !cpp/
