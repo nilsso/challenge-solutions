@@ -4,6 +4,7 @@
 !.gitignore
 
 # Rust
+!Cargo.toml
 !rust/
 !rust/*/
 !*.rs

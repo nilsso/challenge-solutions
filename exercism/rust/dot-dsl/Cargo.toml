@@ -1,0 +1,11 @@
+[package]
+edition = "2018"
+name = "dot_dsl"
+version = "0.1.0"
+
+[dependencies]
+maplit = "1.0.1"
+
+[[bin]]
+name = "dot_dsl"
+path = "src/main.rs"
