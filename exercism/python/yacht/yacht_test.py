@@ -3,10 +3,7 @@ import unittest
 import yacht
 from yacht import score
 
-
-# Tests adapted from `problem-specifications//canonical-data.json` @ v1.0.0
-
-class YachtTests(unittest.TestCase):
+class YachtTest(unittest.TestCase):
     def test_yacht(self):
         self.assertEqual(score([5, 5, 5, 5, 5], yacht.YACHT), 50)
 
@@ -45,6 +42,9 @@ class YachtTests(unittest.TestCase):
 
     def test_two_pair_is_not_a_full_house(self):
         self.assertEqual(score([2, 2, 4, 4, 5], yacht.FULL_HOUSE), 0)
+
+    def test_four_of_a_kind_is_not_a_full_house(self):
+        self.assertEqual(score([1, 4, 4, 4, 4], yacht.FULL_HOUSE), 0)
 
     def test_yacht_is_not_a_full_house(self):
         self.assertEqual(score([2, 2, 2, 2, 2], yacht.FULL_HOUSE), 0)
