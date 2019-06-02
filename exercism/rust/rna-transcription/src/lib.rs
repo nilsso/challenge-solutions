@@ -1,31 +1,37 @@
 #[derive(Debug, PartialEq)]
-pub struct DNA;
+pub struct DNA(String);
 
 #[derive(Debug, PartialEq)]
-pub struct RNA;
-
-const NUCLEOTIDES: &[char] = &['G', 'C', 'T', 'A'];
+pub struct RNA(String);
 
 impl DNA {
-    // Construct new DNA from string.
-    // If string contains invalid nucleotides return index of first invalid nucleotide
     pub fn new(dna: &str) -> Result<DNA, usize> {
-        if Some(pos) = dna.chars().position(|c| NUCLEOTIDES.contains(c)) {
+        if let Some(pos) = dna.chars().position(|c| !['A', 'C', 'G', 'T'].contains(&c)) {
             return Err(pos);
         }
-
+        Ok(Self(dna.to_string()))
     }
 
-    // Transform DNA into corresponding RNA
     pub fn into_rna(self) -> RNA {
-        RNA
+        let dna = self.0;
+        RNA(dna
+            .chars()
+            .map(|c| match c {
+                'G' => 'C',
+                'C' => 'G',
+                'T' => 'A',
+                'A' => 'U',
+                _ => unreachable!(),
+            })
+            .collect())
     }
 }
 
 impl RNA {
-    // Construct new RNA from string.
-    // If string contains invalid nucleotides return index of first invalid nucleotide
     pub fn new(rna: &str) -> Result<RNA, usize> {
-        RNA
+        if let Some(pos) = rna.chars().position(|c| !['A', 'C', 'G', 'U'].contains(&c)) {
+            return Err(pos);
+        }
+        Ok(Self(rna.to_string()))
     }
 }
