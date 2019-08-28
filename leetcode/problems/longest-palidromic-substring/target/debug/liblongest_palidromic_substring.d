@@ -1,0 +1,1 @@
+/Users/nilsso/Documents/challenge-solutions/leetcode/longest-palidromic-substring/target/debug/liblongest_palidromic_substring.rlib: /Users/nilsso/Documents/challenge-solutions/leetcode/longest-palidromic-substring/src/brute_force.rs /Users/nilsso/Documents/challenge-solutions/leetcode/longest-palidromic-substring/src/lib.rs

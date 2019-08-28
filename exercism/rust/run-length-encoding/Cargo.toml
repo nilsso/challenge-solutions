@@ -1,0 +1,8 @@
+[package]
+edition = "2018"
+name = "run-length-encoding"
+version = "1.1.0"
+
+[dependencies]
+regex = "1.1"
+lazy_static = "1.3"

@@ -1,0 +1,11 @@
+[package]
+edition = "2018"
+name = "spiral-matrix"
+version = "1.1.0"
+
+[[bin]]
+name = "spiral-matrix"
+path = "src/main.rs"
+
+[dependencies]
+num-traits = "0.2"
