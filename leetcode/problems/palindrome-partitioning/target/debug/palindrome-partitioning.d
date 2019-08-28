@@ -1,1 +1,0 @@
-/Users/nilsso/Documents/challenge-solutions/leetcode/palindrome-partitioning/target/debug/palindrome-partitioning.dSYM: /Users/nilsso/Documents/challenge-solutions/leetcode/palindrome-partitioning/src/main.rs

@@ -1,1 +1,0 @@
-/Users/nilsso/Documents/challenge-solutions/leetcode/jewels-and-stones/target/debug/jewels_and_stones-064c7c527500c425.dSYM: /Users/nilsso/Documents/challenge-solutions/leetcode/jewels-and-stones/src/main.rs
