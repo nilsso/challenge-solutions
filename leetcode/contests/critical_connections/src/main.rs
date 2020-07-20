@@ -56,19 +56,7 @@ fn redundant_edge(edges: Vec<Vec<i32>>) -> Vec<i32> {
     edges.into_iter().find(|edge| !dsu.union(edge)).unwrap()
 }
 
-fn to_edges(edges: &[(i32, i32)]) -> Vec<Vec<i32>> {
-    edges.iter().map(|t| vec![t.0, t.1]).collect()
-}
-
 fn main() {
-    println!("{:?}", DSU::new());
-}
-
-fn test(edges: &[(i32, i32)], expected: Vec<i32>) {
-    assert_eq!(redundant_edge(to_edges(edges)), expected);
-}
-
-#[test]
-fn test_1() {
-    test(&[(1, 2), (1, 3), (2, 3)], vec![2, 3]);
+    let edges = vec![vec![0,1],vec![1,2],vec![2,0],vec![1,3]];
+    println!("{:?}", redundant_edge(edges));
 }
