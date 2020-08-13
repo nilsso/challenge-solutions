@@ -123,6 +123,10 @@ impl Scale {
     pub fn new(tonic: &str, intervals: &str) -> Result<Scale, Error> {
         let (tonic, lean) = parse_tonic(tonic)?;
         let intervals = parse_intervals(intervals)?;
+        // First we convert the inter-value intervals to intervals from tonic by taking the modular
+        // cumulative sum of the intervals (and by starting the accumulation with the tonic pitch
+        // class value we also accumulate the pitch class values for the scale for free). Then we
+        // fold these values into the mask.
         let pitches = intervals
             .iter()
             .accumulate(tonic, |a, b| (a + b) % 12)
