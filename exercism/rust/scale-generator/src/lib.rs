@@ -101,7 +101,7 @@ fn parse_intervals(tokens: &str) -> Result<Vec<u16>, Error> {
 
 /// Scale abstraction.
 ///
-/// The 'pitches' field contains as a `u16` bitmask the information of whether a pitch is in the
+/// The `pitches` field contains as a `u16` bitmask the information of whether a pitch is in the
 /// scale, where the bits from right to left represents the pitches C, C sharp/D flat, D, etc. The
 /// `tonic` field represents the pitch class value of the scale's tonic (or key center). Lastly the
 /// `lean` field represents whether the pitch names of the scale are to be represented as sharps or
