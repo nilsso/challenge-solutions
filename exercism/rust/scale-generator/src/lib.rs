@@ -70,6 +70,12 @@ fn parse_pitch(token: &str) -> Result<u16, Error> {
 }
 
 /// Parse a pitch token as the tonic of a scale to its pitch class value and associated lean.
+///
+/// If the pitch token is uppercase it represents tonic of a major scale, else of a minor scale. To
+/// find the lean of the scale we consider the relative major of the tonic. If already major,
+/// nothing needs to be done and `Lean::from_tonic` is called with the tonic pitch class value as
+/// is. If minor we first need to translate the value by three semitones to get the relative major
+/// of the minor scale tonic, then `Lean::from_tonic` is called.
 fn parse_tonic(token: &str) -> Result<(u16, Lean), Error> {
     let value = parse_pitch(token)?;
     let is_major = token.starts_with(|c: char| ('A'..='Z').contains(&c));
