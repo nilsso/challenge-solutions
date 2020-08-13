@@ -1,65 +1,90 @@
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(unused_mut)]
-#![allow(dead_code)]
-
-use crossbeam_utils::thread;
 use std::collections::HashMap;
 use std::sync::{mpsc, Arc, Mutex};
-//use std::thread;
+use std::thread;
 
-type CountsT = HashMap<char, usize>;
+type Frequencies = HashMap<char, usize>;
 
-enum Message<'a> {
-    Line(&'a str),
+/// Message encapsulation to send threads.
+enum Message {
+    Line(String),
     Join,
 }
 
-pub fn frequency<'a>(lines: &'static [&str], worker_count: usize) -> HashMap<char, usize> {
-    let (line_sender, line_reciever) = mpsc::channel::<Message>();
-    let (counts_sender, counts_reciever) = mpsc::channel::<CountsT>();
+/// Get character frequency from a single line.
+pub fn frequency_line(line: &str) -> Frequencies {
+    let mut frequencies = Frequencies::new();
+    for c in line
+        .chars()
+        .filter(|c| c.is_alphabetic())
+        .map(|c| c.to_ascii_lowercase())
+    {
+        *frequencies.entry(c).or_insert(0) += 1;
+    }
+    frequencies
+}
 
-    let line_reciever = Arc::new(Mutex::new(line_reciever));
-    let counts_sender = Arc::new(Mutex::new(counts_sender));
+/// Get character frequency from an array of lines.
+pub fn frequency(lines: &[&str], worker_count: usize) -> Frequencies {
+    let mut total_frequencies = Frequencies::new();
 
-    for id in 0..worker_count {
-        thread::scope(|s| {
-            let line_reciever = line_reciever.clone();
-            let counts_sender = counts_sender.clone();
+    // Need two channels:
+    // 1. to send workers messages (i.e. lines of text, and the eventual termination instruction);
+    // 2. to receive frequency results from the workers.
+    let (message_sender, message_receiver) = mpsc::channel();
+    let (frequencies_sender, frequencies_receiver) = mpsc::channel();
 
-            s.spawn(move |_| {
-                let mut inner_counts = CountsT::new();
+    // Each thread needs a reference to the 1. message receiver, and 2. frequency sender.
+    // - Arc allows each worker to have shared ownership of the channels
+    // - Mutex allows each worker to have mutable access to the channels
+    let message_receiver = Arc::new(Mutex::new(message_receiver));
+    let frequencies_sender = Arc::new(Mutex::new(frequencies_sender));
 
-                loop {
-                    let msg = line_reciever.lock().unwrap().recv().unwrap();
-                    use Message::{Join, Line};
+    for _id in 0..worker_count {
+        // Creating shared ownership references to the channels.
+        let message_receiver = message_receiver.clone();
+        let frequencies_sender = frequencies_sender.clone();
 
-                    println!("thread {} waiting", id);
+        // Since threads are going to be running for as long as there are lines to process,
+        // individually receiving lines as they're ready, we need a handle so that we can later
+        // join the threads (after having sent all threads the command to break).
+        thread::spawn(move || loop {
+            // Lock the receiver mutex to receive a message (this blocks the thread).
+            let msg = message_receiver.lock().unwrap().recv().unwrap();
 
-                    match msg {
-                        Line(line) => {
-                            println!("thread {} recieved '{}'", id, line);
-                        }
-                        Join => {
-                            println!("thread {} joining", id);
-                            break;
-                        }
-                    };
+            // Message is either:
+            // 1. a line, whose frequency result is sent back via the sender, or
+            // 2. the termination instruction.
+            match msg {
+                Message::Line(line) => {
+                    let res = frequency_line(line.as_str());
+
+                    frequencies_sender
+                        .lock()
+                        .unwrap()
+                        .send(res)
+                        .unwrap();
                 }
-            });
-        })
-        .ok();
+                Message::Join => break,
+            }
+        });
     }
 
+    // Send out the lines.
     for line in lines {
-        line_sender.send(Message::Line(line)).ok();
+        message_sender.send(Message::Line(line.to_string())).unwrap();
     }
 
-    for line in lines {
-        line_sender.send(Message::Join).ok();
+    // Send out the termination instruction.
+    for _ in 0..worker_count {
+        message_sender.send(Message::Join).unwrap();
     }
 
-    //while let Ok(inner_counts) = counts_reciever.recv() {}
+    // Receive and assemble all the thread results.
+    for frequencies in frequencies_receiver.iter().take(lines.len()) {
+        for (c, n) in frequencies {
+            *total_frequencies.entry(c).or_insert(0) += n;
+        }
+    }
 
-    HashMap::new()
+    total_frequencies
 }
