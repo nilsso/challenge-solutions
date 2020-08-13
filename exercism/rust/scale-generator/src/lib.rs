@@ -41,10 +41,10 @@ impl Lean {
     /// Get lean by considering the scale tonic pitch class value.
     ///
     /// Whether a key will be represented by sharps or flats is determined by where it falls on the
-    /// circle of fifths (). By iterating the scale tonic value by a step of -7 (in semitones)
-    /// until it reaches 0 we find how much the scale leans towards being a sharp key, and likewise
-    /// with a step of 7 for how much a flat key. Whichever case reaches 0 first determines the
-    /// lean.
+    /// circle of fifths (https://en.wikipedia.org/wiki/Circle_of_fifths). By iterating the scale
+    /// tonic value by a step of -7 (in semitones) until it reaches 0 we find how much the scale
+    /// leans towards being a sharp key, and likewise with a step of 7 for how much a flat key.
+    /// Whichever case reaches 0 first determines the lean.
     pub fn from_tonic(value: u16) -> Self {
         let mut s = value as i16;
         let mut f = value as i16;
