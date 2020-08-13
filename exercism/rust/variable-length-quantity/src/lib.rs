@@ -1,3 +1,11 @@
+#![feature(bool_to_option)]
+
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(dead_code)]
+
+use std::iter::{once, repeat};
+
 #[derive(Debug, PartialEq)]
 pub enum Error {
     IncompleteNumber,
@@ -5,36 +13,37 @@ pub enum Error {
 }
 
 pub fn to_bytes(values: &[u32]) -> Vec<u8> {
-    let mut bytes: Vec<u8> = Vec::new();
-    for mut v in values.iter().cloned() {
-        let mut temp: Vec<u8> = Vec::new();
-        loop {
-            let r = v % 128;
-            temp.push(r as u8 | 128);
-            v /= 128;
-            if v == 0 {
-                break;
-            }
-        }
-        temp[0] &= 127;
-        bytes.extend(temp.into_iter().rev());
-    }
-    bytes
+    unimplemented!()
 }
 
 pub fn from_bytes(bytes: &[u8]) -> Result<Vec<u32>, Error> {
-    let mut values: Vec<u32> = Vec::new();
-    let mut temp: u32 = 0;
-    for v in bytes.iter() {
-        temp = temp * 128 + (v & 127) as u32;
-        if v & 128 == 0 {
-            values.push(temp);
-            temp = 0;
+    const MASK: u8 = 0b0111_1111;
+    const FIRST: u8 = 0b1000_0000;
+    const LAST: u8 =  0b0111_0000;
+
+    if let Some(byte) = bytes.last() {
+        if byte & FIRST > 0 {
+            return Err(Error::IncompleteNumber);
         }
     }
-    if temp != 0 {
-        Err(Error::IncompleteNumber)
-    } else {
-        Ok(values)
+
+    let mut res = vec![];
+    let mut n = 0;
+    let mut i = 0;
+
+    for b in bytes.into_iter().rev() {
+        if b & FIRST == 0 {
+            res.push(n);
+            n = 0;
+            i = 0;
+        } else if i == 4 && b & LAST > 0 {
+            return Err(Error::Overflow);
+        }
+
+        n |= (b & MASK) as u32;
+        n <<= 7;
+        i += 1;
     }
+
+    Ok(res)
 }
